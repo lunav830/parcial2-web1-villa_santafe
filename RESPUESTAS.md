@@ -127,3 +127,112 @@ Respuesta:
 ```js
 
 ```
+Luna Villa Santafe 
+
+Examen 2- Programación Web 
+
+ 
+
+P1 · ¿En qué orden se imprime? (5 puntos) 
+
+console.log('1'); 
+
+setTimeout(() => console.log('2'), 0); 
+
+const cargar = async () => { 
+
+console.log('3'); 
+
+const respuesta = await fetch('https://rickandmortyapi.com/api/episode/1'); 
+
+console.log('4'); 
+
+}; 
+
+cargar(); 
+
+console.log('5'); 
+
+ 
+
+(a) ¿Los cinco números en el orden en que salen en la consola? 
+
+El orden que muestran son: 1, 3, 5, 2, 4. 
+
+(b) ¿Por qué el 3 sale antes que el 5, si cargar es una función async? 
+
+Porque una función async empieza  hasta llegar a un await, entonces, el número 3 se imprime antes de que la función se detenga a esperar la respuesta de fetch. 
+
+(c) ¿Por qué el 5 no espera a que termine el fetch, y por qué el 2 y el 4 salen al final? 
+
+Porque await solamente pausa la ejecución dentro de la función cargar, pero no para lo siguiente. El número 5 se imprime inmediatamente. El número 2 se ejecuta después porque está dentro de un setTimeout, y el número 4 aparece cuando termina el fetch. 
+
+ 
+
+P2 . 
+
+(a) ¿Qué imprime la consola, exactamente? 
+
+La consola nos mostrara: 
+
+text Episodio: undefined 
+
+(b) ¿Por qué no entra al catch, aunque el episodio no existe? 
+
+Porque la petición recibió una respuesta del servidor, aunque el recurso solicitado no esta, Por eso, el programa continúa. 
+
+(c) ¿Qué línea falta para que sí entre al catch? Escríbela e indica en qué parte del código va. 
+
+Falta : 
+
+javascript if (!respuesta.ok) { throw new Error(HTTP ${respuesta.status}); } 
+
+ 
+
+P3. 
+
+(a) ¿Qué imprimen las líneas marcadas (a), (b) y (c)? 
+
+La consola imprime: 
+
+text 1,3,8 5 string 
+
+(b) ¿Por qué el dato es un string y no un array? 
+
+Porque localStorage solamente almacena información como texto. Cuando guardamos un arreglo , JavaScript lo convierte en una cadena de caracteres. 
+
+(c) ¿Qué pasa si intentamos hacer leido.push(4)? 
+
+Se produce un error porque esta leido es un string, y el método push solamente funciona con arreglos. 
+
+(d) ¿Qué dos líneas debemos corregir para guardar y recuperar el array correctamente? 
+
+Para guardar: 
+
+javascript localStorage.setItem('vistos', JSON.stringify(vistos)); 
+
+Para recuperar: 
+
+javascript const leido = JSON.parse(localStorage.getItem('vistos')); 
+
+ 
+
+ 
+
+JSON.stringify() convierte el arreglo en texto JSON y JSON.parse() permite recuperarlo como un arreglo de JavaScript. 
+
+P4. 
+
+(a) ¿Qué les pasa a los botones después de hacer clic en el primero? 
+
+Después de hacer clic los botones dejan de responder porque render vuelve a generar el contenido HTML de las tarjetas. Los botones nuevos no tienen los eventos que se habían agregado a los anteriores. 
+
+(b) ¿Por qué ocurre esto? 
+
+Porque cuando utilizamos innerHTML para reemplazar las tarjetas, los elementos anteriores desaparecen del DOM junto con sus eventos. Los nuevos botones son elementos diferentes y no conservan los addEventListener pasados. 
+
+(c) ¿Cómo se puede solucionar utilizando delegación de eventos? 
+
+Podemos agregar un solo evento al contenedor  lista, en lugar de agregar un evento a cada botón. De esta forma, el evento permanece funcionando porque está asociado al contenedor lista, que no se reemplaza cuando se ejecuta render. 
+
+ 
