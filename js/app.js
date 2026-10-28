@@ -41,10 +41,11 @@ const tarjetaHTML = (episodio) => {
       <button
         type="button"
         data-id="${episodio.id}"
-        class="mt-auto rounded-lg py-2 font-semibold text-white ${estaVisto
-      ? 'bg-emerald-600 hover:bg-emerald-700'
-      : 'bg-indigo-600 hover:bg-indigo-700'
-    }"
+        class="mt-auto rounded-lg py-2 font-semibold text-white ${
+          estaVisto
+            ? 'bg-emerald-600 hover:bg-emerald-700'
+            : 'bg-indigo-600 hover:bg-indigo-700'
+        }"
       >
         ${estaVisto ? '✓ Visto' : 'Marcar como visto'}
       </button>
@@ -85,6 +86,12 @@ const render = () => {
   // R4 · Filtrar los episodios según la búsqueda y la temporada.
   const episodiosFiltrados = filtrarEpisodios(episodios, filtros);
 
+  // R5 · Contar los personajes de los episodios filtrados.
+  const totalPersonajes = contarPersonajes(episodiosFiltrados);
+
+  // R5 · Actualizar el contador de episodios y personajes.
+  contador.textContent = `${episodiosFiltrados.length} de ${episodios.length} episodios · ${totalPersonajes} personajes`;
+
   // R3 · Mostrar las tarjetas de los episodios.
   if (episodiosFiltrados.length === 0) {
     lista.innerHTML = `
@@ -98,8 +105,6 @@ const render = () => {
   const tarjetas = episodiosFiltrados.map(tarjetaHTML);
 
   lista.innerHTML = tarjetas.join('');
-
-  // TODO R5: actualizar el contador de episodios y personajes.
 };
 
 // R2 · Pide los episodios: muestra cargando; si todo sale bien guarda y pinta;
