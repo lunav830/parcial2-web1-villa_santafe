@@ -41,11 +41,10 @@ const tarjetaHTML = (episodio) => {
       <button
         type="button"
         data-id="${episodio.id}"
-        class="mt-auto rounded-lg py-2 font-semibold text-white ${
-          estaVisto
-            ? 'bg-emerald-600 hover:bg-emerald-700'
-            : 'bg-indigo-600 hover:bg-indigo-700'
-        }"
+        class="mt-auto rounded-lg py-2 font-semibold text-white ${estaVisto
+      ? 'bg-emerald-600 hover:bg-emerald-700'
+      : 'bg-indigo-600 hover:bg-indigo-700'
+    }"
       >
         ${estaVisto ? '✓ Visto' : 'Marcar como visto'}
       </button>
@@ -83,8 +82,11 @@ const mostrarError = (mensaje) => {
 // y actualiza el contador con el formato «7 de 20 episodios · 187 personajes».
 const render = () => {
 
+  // R4 · Filtrar los episodios según la búsqueda y la temporada.
+  const episodiosFiltrados = filtrarEpisodios(episodios, filtros);
+
   // R3 · Mostrar las tarjetas de los episodios.
-  if (episodios.length === 0) {
+  if (episodiosFiltrados.length === 0) {
     lista.innerHTML = `
       <p class="col-span-full rounded-2xl bg-white p-8 text-center text-slate-500">
         Ningún episodio coincide con la búsqueda.
@@ -93,14 +95,15 @@ const render = () => {
     return;
   }
 
-  const tarjetas = episodios.map(tarjetaHTML);
+  const tarjetas = episodiosFiltrados.map(tarjetaHTML);
 
   lista.innerHTML = tarjetas.join('');
 
-
+  // TODO R5: actualizar el contador de episodios y personajes.
 };
 
-
+// R2 · Pide los episodios: muestra cargando; si todo sale bien guarda y pinta;
+// si falla, muestra el error con su botón Reintentar.
 const cargar = async () => {
   mostrarCargando();
 
@@ -114,7 +117,23 @@ const cargar = async () => {
   }
 };
 
+// R4 · Eventos del buscador (input), del select (change) y del formulario (Enter NO recarga).
+inputBusqueda.addEventListener('input', (evento) => {
+  filtros.texto = evento.target.value;
+  render();
+});
 
+selectTemporada.addEventListener('change', (evento) => {
+  filtros.temporada = evento.target.value;
+  render();
+});
+
+formFiltros.addEventListener('submit', (evento) => {
+  evento.preventDefault();
+});
+
+// R6 · UN solo listener en #lista (delegación) que atienda el botón de cada tarjeta
+// y también el botón Reintentar.
 lista.addEventListener('click', (evento) => {
 
   if (evento.target.closest('#btn-reintentar')) {
